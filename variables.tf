@@ -97,7 +97,7 @@ variable "service_account_name" {
 
 variable "ambassador_namespace_single" {
   description = "Set the AMBASSADOR_SINGLE_NAMESPACE environment variable"
-  default = false
+  default = "false"
 }
 
 variable "ambassador_namespace_name" {
