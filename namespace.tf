@@ -6,15 +6,13 @@ resource "kubernetes_namespace" "this" {
       name = "${var.namespace_name}"
     }
 
-    # labels = "${local.lables_namespace}"
-    labels = [
-      {
-        terrafrom = "true"
-      },
-      {
-        app = "${var.name}"
-      }
-    ]
+    labels  {
+      terrafrom = "true"
+    }
+
+    labels {
+      app = "${var.name}"
+    }
 
     name = "${var.namespace_name}"
   }

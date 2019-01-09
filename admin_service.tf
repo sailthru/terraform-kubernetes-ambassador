@@ -5,14 +5,14 @@ resource "kubernetes_service" "this_admin" {
       annotations = "${var.admin_service_annotations}"
       name = "${var.name}-admin"
       namespace =  "${var.namespace_name}"
-      labels = [
-        {
+
+      labels  {
           terrafrom = "true"
-        },
-        {
+        }
+
+        labels {
           app = "${var.name}"
         }
-      ]
     }
   ]
 

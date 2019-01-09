@@ -21,14 +21,13 @@ resource "kubernetes_deployment" "this" {
           "prometheus.io/scrape" = true
         }
 
-        labels = [
-          {
+        labels  {
             terrafrom = "true"
-          },
-          {
+          }
+
+         labels {
             app = "${var.name}"
           }
-        ]
       }
 
       spec = [

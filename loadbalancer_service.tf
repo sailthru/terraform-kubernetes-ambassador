@@ -5,15 +5,14 @@ resource "kubernetes_service" "this_loadbalancer" {
       annotations = "${var.loadbalancer_service_annotations}"
       name = "${var.name}"
       namespace =  "${var.namespace_name}"
-      # labels = "${local.lables_loadbalancer_service}"
-      labels = [
-        {
+
+      labels  {
           terrafrom = "true"
-        },
-        {
+        }
+
+        labels {
           app = "${var.name}"
         }
-      ]
     }
   ]
 
