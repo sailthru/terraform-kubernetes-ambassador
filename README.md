@@ -9,7 +9,6 @@ This is an advanced example showing how to:
 
 * Pass configuration to ambassador
 * Use `external-dns` to create the hostname
-* Create an AWS load
 
 ```hcl
 data "template_file" "getambassador_config" {
