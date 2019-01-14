@@ -41,7 +41,7 @@ module "ambassador" {
     "getambassador.io/config" = "${data.template_file.getambassador_config.rendered}"
   }
 }
----
+```
 
 ## Inputs
 
