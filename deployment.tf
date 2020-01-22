@@ -109,6 +109,14 @@ resource "kubernetes_deployment" "this" {
                   value = "${var.ambassador_id}"
                 },
                 {
+                  name  = "AMBASSADOR_SINGLE_NAMESPACE"
+                  value = "${var.ambassador_namespace_single}"
+                },
+                {
+                  name  = "AMBASSADOR_DEBUG"
+                  value = "${var.ambassador_debug}"
+                },
+                {
                   name = "AMBASSADOR_NAMESPACE"
 
                   value_from = {
