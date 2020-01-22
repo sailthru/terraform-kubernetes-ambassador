@@ -6,7 +6,7 @@ resource "kubernetes_namespace" "this" {
       name = "${var.namespace_name}"
     }
 
-    labels  {
+    labels {
       terrafrom = "true"
     }
 
