@@ -15,18 +15,43 @@ resource "kubernetes_cluster_role" "this" {
   rule = [
     {
       api_groups = [""]
-      resources  = ["services"]
+      resources  = ["endpoints", "namespaces", "secrets", "services"]
       verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["getambassador.io"]
+      resources  = ["*"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["apiextensions.k8s.io"]
+      resources  = ["customresourcedefinitions"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["networking.internal.knative.dev"]
+      resources  = ["clusteringresses", "ingresses"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["networking.internal.knative.dev"]
+      resources  = ["ingresses/status", "clusteringresses/status"]
+      verbs      = ["update"]
+    },
+    {
+      api_groups = ["extensions"]
+      resources  = ["ingresses"]
+      verbs      = ["get", "list", "watch"]
+    },
+    {
+      api_groups = ["extensions"]
+      resources  = ["ingresses/status"]
+      verbs      = ["update"]
     },
     {
       api_groups = [""]
       resources  = ["configmaps"]
       verbs      = ["create", "update", "patch", "get", "list", "watch"]
-    },
-   {
-      api_groups = [""]
-      resources  = ["secrets"]
-      verbs      = ["get", "list", "watch"]
     }
   ]
 }

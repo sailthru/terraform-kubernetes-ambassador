@@ -19,7 +19,7 @@ variable "ambassador_image" {
 }
 
 variable "ambassador_image_tag" {
-  default = "0.40.2"
+  default = "0.50.3"
   description = "Ambassador_image image tag"
 }
 
@@ -63,17 +63,17 @@ variable "volume_mounts" {
 
 variable "resources_requests_cpu" {
   description = "CPU requests"
-  default = "200m" 
+  default = "200m"
 }
 
 variable "resources_requests_memory" {
   description = "memory requests"
-  default = "500Mi" 
+  default = "500Mi"
 }
 
 variable "resources_limits_cpu" {
   description = "CPU limit"
-  default = "1" 
+  default = "1"
 }
 variable "resources_limits_memory" {
   description = "memory limit"
@@ -103,6 +103,11 @@ variable "ambassador_namespace_single" {
 variable "ambassador_namespace_name" {
   description = "Set the AMBASSADOR_NAMESPACE environment variable"
   default = "metadata.namespace"
+}
+
+variable "ambassador_debug" {
+  description = "Set the AMBASSADOR_DEBUG environment variable"
+  default = false
 }
 
 variable "ambassador_id" {

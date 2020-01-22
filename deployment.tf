@@ -34,7 +34,7 @@ resource "kubernetes_deployment" "this" {
         {
           service_account_name = "${local.service_account_name}"
           restart_policy = "Always"
-    
+
           volume = [
             {
               name = "stats-exporter-mapping-config"
@@ -42,8 +42,8 @@ resource "kubernetes_deployment" "this" {
                 name = "${var.name}-config"
                 items = [
                   {
-                   key = "exporterConfiguration" 
-                   path = "mapping-config.yaml" 
+                   key = "exporterConfiguration"
+                   path = "mapping-config.yaml"
                   }
                 ]
               }
@@ -72,7 +72,7 @@ resource "kubernetes_deployment" "this" {
                   protocol = "TCP"
                 }
               ]
-              
+
               volume_mount = [
                 {
                   mount_path = "/statsd-exporter/"
@@ -204,7 +204,7 @@ resource "kubernetes_deployment" "this_namespace_single" {
         {
           service_account_name = "${local.service_account_name}"
           restart_policy = "Always"
-    
+
           volume = [
             {
               name = "stats-exporter-mapping-config"
@@ -212,8 +212,8 @@ resource "kubernetes_deployment" "this_namespace_single" {
                 name = "${var.name}-config"
                 items = [
                   {
-                   key = "exporterConfiguration" 
-                   path = "mapping-config.yaml" 
+                   key = "exporterConfiguration"
+                   path = "mapping-config.yaml"
                   }
                 ]
               }
@@ -242,7 +242,7 @@ resource "kubernetes_deployment" "this_namespace_single" {
                   protocol = "TCP"
                 }
               ]
-              
+
               volume_mount = [
                 {
                   mount_path = "/statsd-exporter/"
@@ -275,7 +275,11 @@ resource "kubernetes_deployment" "this_namespace_single" {
                 },
                 {
                   name = "AMBASSADOR_SINGLE_NAMESPACE"
-                  value = "false"
+                  value = "${var.ambassador_namespace_single}"
+                },
+                {
+                  name = "AMBASSADOR_DEBUG"
+                  value = "${var.ambassador_debug}"
                 },
                 {
                   name = "AMBASSADOR_NAMESPACE"
