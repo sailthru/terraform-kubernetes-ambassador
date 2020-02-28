@@ -54,7 +54,6 @@ module "ambassador" {
 | ambassador_image | Ambassador_image	Image | string | `quay.io/datawire/ambassador` | no |
 | ambassador_image_tag | Ambassador_image image tag | string | `0.40.2` | no |
 | ambassador_namespace_name | Set the AMBASSADOR_NAMESPACE environment variable | string | `metadata.namespace` | no |
-| ambassador_namespace_single | Set the AMBASSADOR_SINGLE_NAMESPACE environment variable | string | `false` | no |
 | cluster_role_name | Set cluster rolne name, defaults to name | string | `` | no |
 | daemon_set | If true Create a daemonSet. By default Deployment controller will be created | string | `false` | no |
 | exporter_configuration | Prometheus exporter configuration in YALM format | string | `` | no |

@@ -1,6 +1,6 @@
 # Create a deployment for the service
 resource "kubernetes_daemonset" "this" {
-  count = "${var.daemon_set && ! var.ambassador_namespace_single ? 1 : 0}"
+  count = "${var.daemon_set ? 1 : 0}"
 
   metadata {
     name      = "${var.name}"
@@ -106,10 +106,6 @@ resource "kubernetes_daemonset" "this" {
                 {
                   name  = "AMBASSADOR_ID"
                   value = "${var.ambassador_id}"
-                },
-                {
-                  name  = "AMBASSADOR_SINGLE_NAMESPACE"
-                  value = "${var.ambassador_namespace_single}"
                 },
                 {
                   name  = "AMBASSADOR_DEBUG"
@@ -187,7 +183,7 @@ resource "kubernetes_daemonset" "this" {
 
 # Create a deployment for the service
 resource "kubernetes_daemonset" "this_namespace_single" {
-  count = "${var.daemon_set && var.ambassador_namespace_single ? 1 : 0}"
+  count = "${var.daemon_set ? 1 : 0}"
 
   metadata {
     name      = "${var.name}"
@@ -293,10 +289,6 @@ resource "kubernetes_daemonset" "this_namespace_single" {
                 {
                   name  = "AMBASSADOR_ID"
                   value = "${var.ambassador_id}"
-                },
-                {
-                  name  = "AMBASSADOR_SINGLE_NAMESPACE"
-                  value = "${var.ambassador_namespace_single}"
                 },
                 {
                   name  = "AMBASSADOR_DEBUG"
