@@ -96,11 +96,6 @@ variable "service_account_name" {
   description = "Service account to be used"
 }
 
-variable "ambassador_namespace_single" {
-  description = "Set the AMBASSADOR_SINGLE_NAMESPACE environment variable"
-  default     = false
-}
-
 variable "ambassador_namespace_name" {
   description = "Set the AMBASSADOR_NAMESPACE environment variable"
   default     = "metadata.namespace"
