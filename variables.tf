@@ -36,7 +36,7 @@ variable "image_pull_policy" {
 variable "image_pull_secrets" {
   description = "Image pull secrets"
   default     = []
-  type        = "list"
+  type        = list(string)
 }
 
 variable "daemon_set" {
@@ -52,13 +52,13 @@ variable "replica_count" {
 variable "volumes" {
   description = "Volumes for the ambassador service"
   default     = []
-  type        = "list"
+  type        = list(string)
 }
 
 variable "volume_mounts" {
   description = "Volume mounts for the ambassador service"
   default     = []
-  type        = "list"
+  type        = list(string)
 }
 
 variable "resources_requests_cpu" {
@@ -145,7 +145,7 @@ variable "loadbalancer_service_ip" {
 variable "loadbalancer_service_annotations" {
   description = "Annotations to apply to Ambassador loadbalancer service"
   default     = {}
-  type        = "map"
+  type        = map(string)
 }
 
 variable "loadbalancer_service_source_ranges" {
@@ -167,7 +167,7 @@ variable "admin_service_enable" {
 variable "admin_service_annotations" {
   description = "Annotations to apply to Ambassador loadbalancer service"
   default     = {}
-  type        = "map"
+  type        = map(string)
 }
 
 variable "admin_service_type" {
@@ -208,5 +208,6 @@ variable "timing_shutdown" {
 variable "lables_global" {
   description = "Additional global lables to be applied, list of maps"
   default     = []
-  type        = "list"
+  type        = list(string)
 }
+

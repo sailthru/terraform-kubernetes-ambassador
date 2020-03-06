@@ -1,20 +1,18 @@
 resource "kubernetes_config_map" "this" {
   metadata {
     name      = "${var.name}-config"
-    namespace = "${var.namespace_name}"
+    namespace = var.namespace_name
 
-    labels {
-      terrafrom = "true"
-    }
-
-    labels {
-      app = "${var.name}"
+    labels = {
+      terrafrom = "true",
+      app       = var.name
     }
   }
 
-  data {
-    exporterConfiguration = "${var.exporter_configuration}"
+  data = {
+    exporterConfiguration = var.exporter_configuration
   }
 
-  depends_on = ["kubernetes_namespace.this"]
+  depends_on = [kubernetes_namespace.this]
 }
+
