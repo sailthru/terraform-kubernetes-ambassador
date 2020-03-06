@@ -1,183 +1,162 @@
 # Create a deployment for the service
 resource "kubernetes_deployment" "this" {
-  count = "${! var.daemon_set ? 1 : 0}"
+  count = false == var.daemon_set ? 1 : 0
 
   metadata {
-    name      = "${var.name}"
-    namespace = "${var.namespace_name}"
+    name      = var.name
+    namespace = var.namespace_name
   }
 
   spec {
-    replicas = "${var.replica_count}"
+    replicas = var.replica_count
 
     selector {
-      app = "${var.name}"
+      match_labels = {
+        app = var.name
+      }
     }
 
     template {
       metadata {
-        annotations {
+        annotations = {
           "sidecar.istio.io/inject" = false
           "prometheus.io/port"      = "9102"
           "prometheus.io/scrape"    = true
         }
 
-        labels {
-          terrafrom = "true"
-        }
-
-        labels {
-          app = "${var.name}"
+        labels = {
+          terrafrom = "true",
+          app       = var.name
         }
       }
 
-      spec = [
-        {
-          service_account_name = "${local.service_account_name}"
-          restart_policy       = "Always"
+      spec {
+        service_account_name = local.service_account_name
+        restart_policy       = "Always"
 
-          volume = [
-            {
-              name = "stats-exporter-mapping-config"
+        volume {
+          name = "stats-exporter-mapping-config"
 
-              config_map = {
-                name = "${var.name}-config"
+          config_map {
+            name = "${var.name}-config"
 
-                items = [
-                  {
-                    key  = "exporterConfiguration"
-                    path = "mapping-config.yaml"
-                  },
-                ]
-              }
-            },
+            items {
+              key  = "exporterConfiguration"
+              path = "mapping-config.yaml"
+            }
+          }
+        }
+
+        container {
+          name              = "${var.name}-statsd-sink"
+          image             = "${var.exporter_image}:${var.exporter_image_tag}"
+          image_pull_policy = var.image_pull_policy
+
+          args = [
+            "-statsd.listen-address=:8125",
+            "-statsd.mapping-config=/statsd-exporter/mapping-config.yaml",
           ]
 
-          container = [
-            {
-              name              = "${var.name}-statsd-sink"
-              image             = "${var.exporter_image}:${var.exporter_image_tag}"
-              image_pull_policy = "${var.image_pull_policy}"
+          port {
+            container_port = 9102
+            name           = "metrics"
+            protocol       = "TCP"
+          }
+          port {
+            container_port = 8125
+            name           = "listener"
+            protocol       = "TCP"
+          }
 
-              args = [
-                "-statsd.listen-address=:8125",
-                "-statsd.mapping-config=/statsd-exporter/mapping-config.yaml",
-              ]
+          volume_mount {
+            mount_path = "/statsd-exporter/"
+            name       = "stats-exporter-mapping-config"
+            read_only  = true
+          }
+        }
+        container {
+          name                     = var.name
+          image                    = "${var.ambassador_image}:${var.ambassador_image_tag}"
+          image_pull_policy        = var.image_pull_policy
+          termination_message_path = "/dev/termination-log"
 
-              port = [
-                {
-                  container_port = 9102
-                  name           = "metrics"
-                  protocol       = "TCP"
-                },
-                {
-                  container_port = 8125
-                  name           = "listener"
-                  protocol       = "TCP"
-                },
-              ]
+          resources {
+            requests {
+              memory = var.resources_requests_memory
+              cpu    = var.resources_requests_cpu
+            }
 
-              volume_mount = [
-                {
-                  mount_path = "/statsd-exporter/"
-                  name       = "stats-exporter-mapping-config"
-                  read_only  = true
-                },
-              ]
-            },
-            {
-              name                     = "${var.name}"
-              image                    = "${var.ambassador_image}:${var.ambassador_image_tag}"
-              image_pull_policy        = "${var.image_pull_policy}"
-              termination_message_path = "/dev/termination-log"
+            limits {
+              memory = var.resources_limits_memory
+              cpu    = var.resources_limits_cpu
+            }
+          }
 
-              resources {
-                requests {
-                  memory = "${var.resources_requests_memory}"
-                  cpu    = "${var.resources_requests_cpu}"
-                }
+          env {
+            name  = "AMBASSADOR_ID"
+            value = var.ambassador_id
+          }
+          env {
+            name  = "AMBASSADOR_DEBUG"
+            value = var.ambassador_debug
+          }
+          env {
+            name = "AMBASSADOR_NAMESPACE"
 
-                limits {
-                  memory = "${var.resources_limits_memory}"
-                  cpu    = "${var.resources_limits_cpu}"
-                }
+            value_from {
+              field_ref {
+                field_path = var.ambassador_namespace_name
               }
+            }
+          }
 
-              env = [
-                {
-                  name  = "AMBASSADOR_ID"
-                  value = "${var.ambassador_id}"
-                },
-                {
-                  name  = "AMBASSADOR_DEBUG"
-                  value = "${var.ambassador_debug}"
-                },
-                {
-                  name = "AMBASSADOR_NAMESPACE"
+          port {
+            name           = "http"
+            container_port = 80
+            protocol       = "TCP"
+          }
+          port {
+            name           = "https"
+            container_port = 443
+            protocol       = "TCP"
+          }
+          port {
+            name           = "admin"
+            container_port = 8877
+            protocol       = "TCP"
+          }
 
-                  value_from = {
-                    field_ref = {
-                      field_path = "${var.ambassador_namespace_name}"
-                    }
-                  }
-                },
-              ]
+          liveness_probe {
+            initial_delay_seconds = 3
+            success_threshold     = 1
+            timeout_seconds       = 1
 
-              port = [
-                {
-                  name           = "http"
-                  container_port = 80
-                  protocol       = "TCP"
-                },
-                {
-                  name           = "https"
-                  container_port = 443
-                  protocol       = "TCP"
-                },
-                {
-                  name           = "admin"
-                  container_port = 8877
-                  protocol       = "TCP"
-                },
-              ]
+            http_get {
+              path   = "/ambassador/v0/check_alive"
+              port   = 8877
+              scheme = "HTTP"
+            }
+          }
 
-              liveness_probe = [
-                {
-                  initial_delay_seconds = 3
-                  success_threshold     = 1
-                  timeout_seconds       = 1
+          readiness_probe {
+            initial_delay_seconds = 3
+            success_threshold     = 1
+            timeout_seconds       = 1
 
-                  http_get = [
-                    {
-                      path   = "/ambassador/v0/check_alive"
-                      port   = 8877
-                      scheme = "HTTP"
-                    },
-                  ]
-                },
-              ]
-
-              readiness_probe = [
-                {
-                  initial_delay_seconds = 3
-                  success_threshold     = 1
-                  timeout_seconds       = 1
-
-                  http_get = [
-                    {
-                      path   = "/ambassador/v0/check_ready"
-                      port   = 8877
-                      scheme = "HTTP"
-                    },
-                  ]
-                },
-              ]
-            },
-          ]
-        },
-      ]
+            http_get {
+              path   = "/ambassador/v0/check_ready"
+              port   = 8877
+              scheme = "HTTP"
+            }
+          }
+        }
+      }
     }
   }
 
-  depends_on = ["kubernetes_namespace.this", "kubernetes_service_account.this"]
+  depends_on = [
+    kubernetes_namespace.this,
+    kubernetes_service_account.this,
+  ]
 }
+
