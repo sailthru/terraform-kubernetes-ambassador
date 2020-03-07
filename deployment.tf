@@ -31,8 +31,9 @@ resource "kubernetes_deployment" "this" {
       }
 
       spec {
-        service_account_name = local.service_account_name
-        restart_policy       = "Always"
+        service_account_name            = local.service_account_name
+        automount_service_account_token = true
+        restart_policy                  = "Always"
 
         volume {
           name = "stats-exporter-mapping-config"

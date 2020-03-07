@@ -29,8 +29,9 @@ resource "kubernetes_daemonset" "this" {
       }
 
       spec {
-        service_account_name = var.name
-        restart_policy       = "Always"
+        service_account_name            = var.name
+        automount_service_account_token = true
+        restart_policy                  = "Always"
 
         volume {
           name = "stats-exporter-mapping-config"
