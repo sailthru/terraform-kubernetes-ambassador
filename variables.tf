@@ -44,11 +44,6 @@ variable "daemon_set" {
   description = "If true Create a daemonSet. By default Deployment controller will be created"
 }
 
-variable "replica_count" {
-  default     = 1
-  description = "Number of Ambassador replicas"
-}
-
 variable "volumes" {
   description = "Volumes for the ambassador service"
   default     = []
@@ -209,5 +204,20 @@ variable "lables_global" {
   description = "Additional global lables to be applied, list of maps"
   default     = []
   type        = list(string)
+}
+
+variable "autoscaling_min_replicas" {
+  description = "This field sets minimum autoscaling replica count"
+  default     = 3
+}
+
+variable "autoscaling_max_replicas" {
+  description = "This field sets maximum autoscaling replica count"
+  default     = 6
+}
+
+variable "autoscaling_target_cpu_utilization_percentage" {
+  description = "Configure the target cpu utilization percentage for each container"
+  default     = 50
 }
 
