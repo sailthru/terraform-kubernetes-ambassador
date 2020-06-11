@@ -2,14 +2,16 @@
 resource "kubernetes_deployment" "this" {
   count = false == var.daemon_set ? 1 : 0
 
+  lifecycle {
+    ignore_changes = [spec.0.replicas]
+  }
+
   metadata {
     name      = var.name
     namespace = var.namespace_name
   }
 
   spec {
-    replicas = var.replica_count
-
     selector {
       match_labels = {
         app = var.name

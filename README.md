@@ -54,6 +54,9 @@ module "ambassador" {
 | ambassador_image | Ambassador_image	Image | string | `quay.io/datawire/ambassador` | no |
 | ambassador_image_tag | Ambassador_image image tag | string | `0.40.2` | no |
 | ambassador_namespace_name | Set the AMBASSADOR_NAMESPACE environment variable | string | `metadata.namespace` | no |
+| autoscaling_min_replicas | Sets minimum replica count for the horizontal pod autoscaler | string | `3` | no |
+| autoscaling_max_replicas | Sets maximum replica count for the horizontal pod autoscaler | string | `6` | no |
+| autoscaling_target_cpu_utilization_percentage | Sets the target CPU utilization percentage for the horizontal pod autoscaler | string | `50` | no |
 | cluster_role_name | Set cluster rolne name, defaults to name | string | `` | no |
 | daemon_set | If true Create a daemonSet. By default Deployment controller will be created | string | `false` | no |
 | exporter_configuration | Prometheus exporter configuration in YALM format | string | `` | no |
@@ -73,7 +76,6 @@ module "ambassador" {
 | namespace_create | Create the namespace, must set a unique namespace_name | string | `false` | no |
 | namespace_name | Kubernetes namespace name | string | `default` | no |
 | rbac_create | If true, create and use RBAC resources | string | `true` | no |
-| replica_count | Number of Ambassador replicas | string | `1` | no |
 | resources_limits_cpu | CPU limit | string | `1` | no |
 | resources_limits_memory | memory limit | string | `1Gi` | no |
 | resources_requests_cpu | CPU requests | string | `200m` | no |
