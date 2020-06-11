@@ -12,8 +12,9 @@ resource "kubernetes_horizontal_pod_autoscaler" "ambassador" {
     target_cpu_utilization_percentage = var.autoscaling_target_cpu_utilization_percentage
 
     scale_target_ref {
-      kind = "Deployment"
-      name = var.name
+      api_version = "extensions/v1beta1"
+      kind        = "Deployment"
+      name        = var.name
     }
   }
 
