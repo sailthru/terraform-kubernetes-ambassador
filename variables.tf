@@ -76,6 +76,26 @@ variable "resources_limits_memory" {
   default     = "1Gi"
 }
 
+variable "resources_statsd_requests_cpu" {
+  description = "CPU requests for statsd sidecar container"
+  default     = "50m"
+}
+
+variable "resources_statsd_requests_memory" {
+  description = "memory requests for statsd sidecar container"
+  default     = "100Mi"
+}
+
+variable "resources_statsd_limits_cpu" {
+  description = "CPU limit for statsd sidecar container"
+  default     = "50m"
+}
+
+variable "resources_statsd_limits_memory" {
+  description = "memory limit for statsd sidecar container"
+  default     = "100Mi"
+}
+
 variable "rbac_create" {
   default     = true
   description = "If true, create and use RBAC resources"
