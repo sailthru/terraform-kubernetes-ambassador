@@ -60,6 +60,18 @@ resource "kubernetes_deployment" "this" {
             "-statsd.mapping-config=/statsd-exporter/mapping-config.yaml",
           ]
 
+          resources {
+            requests {
+              memory = var.resources_statsd_requests_memory
+              cpu    = var.resources_statsd_requests_cpu
+            }
+
+            limits {
+              memory = var.resources_statsd_limits_memory
+              cpu    = var.resources_statsd_limits_cpu
+            }
+          }
+
           port {
             container_port = 9102
             name           = "metrics"
