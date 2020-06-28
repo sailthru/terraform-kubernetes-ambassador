@@ -111,10 +111,27 @@ resource "kubernetes_deployment" "this" {
             name  = "AMBASSADOR_ID"
             value = var.ambassador_id
           }
+
           env {
             name  = "AMBASSADOR_DEBUG"
             value = var.ambassador_debug
           }
+
+          env {
+            name  = "STATSD_ENABLED"
+            value = true
+          }
+
+          env {
+            name  = "STATSD_HOST"
+            value = "localhost"
+          }
+
+          env {
+            name  = "STATSD_PORT"
+            value = 8125
+          }
+
           env {
             name = "AMBASSADOR_NAMESPACE"
 
