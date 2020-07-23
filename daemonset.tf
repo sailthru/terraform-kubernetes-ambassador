@@ -121,16 +121,15 @@ resource "kubernetes_daemonset" "this" {
             }
           }
 
-          port {
-            name           = "http"
-            container_port = 80
-            protocol       = "TCP"
+          dynamic "port" {
+            for_each = var.loadbalance_service_target_ports
+            content {
+              name           = port.value.name
+              container_port = port.value.target_port
+              protocol       = "TCP"
+            }
           }
-          port {
-            name           = "https"
-            container_port = 443
-            protocol       = "TCP"
-          }
+
           port {
             name           = "admin"
             container_port = 8877
