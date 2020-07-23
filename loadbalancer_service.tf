@@ -15,17 +15,14 @@ resource "kubernetes_service" "this_loadbalancer" {
   spec {
     type = var.loadbalancer_service_type
 
-    port {
-      name        = "http"
-      protocol    = "TCP"
-      port        = 80
-      target_port = var.loadbalancer_service_target_ports_http
-    }
-    port {
-      name        = "https"
-      protocol    = "TCP"
-      port        = 443
-      target_port = var.loadbalancer_service_target_ports_https
+    dynamic "port" {
+      for_each = var.loadbalance_service_target_ports
+      content {
+        name        = port.value.name
+        protocol    = "TCP"
+        port        = port.value.target_port
+        target_port = port.value.target_port
+      }
     }
 
     selector = {

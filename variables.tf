@@ -1,5 +1,5 @@
 variable "name" {
-  description = "Pod name, used to set the nam"
+  description = "Pod name, used to set the name"
   default     = "ambassador"
 }
 
@@ -19,7 +19,7 @@ variable "ambassador_image" {
 }
 
 variable "ambassador_image_tag" {
-  default     = "0.50.3"
+  default     = "1.6.0"
   description = "Ambassador_image image tag"
 }
 
@@ -131,14 +131,18 @@ variable "loadbalancer_service_enable" {
   default     = true
 }
 
-variable "loadbalancer_service_target_ports_http" {
-  description = "Sets the targetPort that maps to the service's cleartext port"
-  default     = 80
-}
-
-variable "loadbalancer_service_target_ports_https" {
-  description = "Sets the targetPort that maps to the service's TLS port"
-  default     = 443
+variable "loadbalance_service_target_ports" {
+  description = "Sets the name, target_port and service port for a service"
+  default = [
+    {
+      name = "http"
+      target_port = "80"
+    },
+    {
+      name = "https"
+      target_port = "443"
+    },
+  ]
 }
 
 variable "loadbalancer_service_type" {
