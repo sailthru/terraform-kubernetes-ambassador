@@ -69,8 +69,7 @@ module "ambassador" {
 | loadbalancer_service_enable | Enable the loadbalancer service | string | `true` | no |
 | loadbalancer_service_ip | IP address to assign (if cloud provider supports it) | string | `` | no |
 | loadbalancer_service_source_ranges | Passed to cloud provider load balancer if created (e.g: AWS ELB) | string | `` | no |
-| loadbalancer_service_target_ports_http | Sets the targetPort that maps to the service's cleartext port | string | `80` | no |
-| loadbalancer_service_target_ports_https | Sets the targetPort that maps to the service's TLS port | string | `443` | no |
+| loadbalancer_service_target_ports | Sets the name, port, target_port and container_port for a service | list | `80 and 443` | no |
 | loadbalancer_service_type | Service type to be used | string | `LoadBalancer` | no |
 | name | Pod name, used to set the nam | string | `ambassador` | no |
 | namespace_create | Create the namespace, must set a unique namespace_name | string | `false` | no |
