@@ -135,14 +135,16 @@ variable "loadbalance_service_target_ports" {
   description = "Sets the name, target_port and service port for a service"
   default = [
     {
-      name        = "http"
-      port        = "80"
-      target_port = "80"
+      name           = "http"
+      port           = "80"
+      target_port    = "80"
+      container_port = "80"
     },
     {
-      name        = "https"
-      port        = "443"
-      target_port = "443"
+      name           = "https"
+      port           = "443"
+      target_port    = "443"
+      container_port = "443"
     },
   ]
 }
