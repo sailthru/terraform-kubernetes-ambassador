@@ -125,7 +125,7 @@ resource "kubernetes_daemonset" "this" {
             for_each = var.loadbalance_service_target_ports
             content {
               name           = port.value.name
-              container_port = port.value.target_port
+              container_port = port.value.container_port
               protocol       = "TCP"
             }
           }
