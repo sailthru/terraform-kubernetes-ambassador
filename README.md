@@ -60,7 +60,6 @@ module "ambassador" {
 | cluster_role_name | Set cluster rolne name, defaults to name | string | `` | no |
 | daemon_set | If true Create a daemonSet. By default Deployment controller will be created | string | `false` | no |
 | exporter_configuration | Prometheus exporter configuration in YALM format | string | `` | no |
-| exporter_image | Prometheus exporter image | string | `prom/statsd-exporter` | no |
 | exporter_image_tag | Prometheus exporter image tag | string | `v0.6.0` | no |
 | image_pull_policy | Image pull policy | string | `IfNotPresent` | no |
 | image_pull_secrets | Image pull secrets | list | `<list>` | no |

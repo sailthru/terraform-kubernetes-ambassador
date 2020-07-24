@@ -76,26 +76,6 @@ variable "resources_limits_memory" {
   default     = "1Gi"
 }
 
-variable "resources_statsd_requests_cpu" {
-  description = "CPU requests for statsd sidecar container"
-  default     = "50m"
-}
-
-variable "resources_statsd_requests_memory" {
-  description = "memory requests for statsd sidecar container"
-  default     = "100Mi"
-}
-
-variable "resources_statsd_limits_cpu" {
-  description = "CPU limit for statsd sidecar container"
-  default     = "50m"
-}
-
-variable "resources_statsd_limits_memory" {
-  description = "memory limit for statsd sidecar container"
-  default     = "100Mi"
-}
-
 variable "rbac_create" {
   default     = true
   description = "If true, create and use RBAC resources"
@@ -201,16 +181,6 @@ variable "admin_service_type" {
 variable "exporter_configuration" {
   description = "	Prometheus exporter configuration in YALM format"
   default     = ""
-}
-
-variable "exporter_image" {
-  description = "	Prometheus exporter image"
-  default     = "prom/statsd-exporter"
-}
-
-variable "exporter_image_tag" {
-  description = "	Prometheus exporter image tag"
-  default     = "v0.6.0"
 }
 
 variable "timing_restart" {

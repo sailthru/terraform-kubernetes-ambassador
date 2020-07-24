@@ -18,12 +18,13 @@ resource "kubernetes_daemonset" "this" {
       metadata {
         annotations = {
           "sidecar.istio.io/inject" = false
-          "prometheus.io/port"      = "9102"
+          "prometheus.io/port"      = 8877
           "prometheus.io/scrape"    = true
+          "prometheus.io/path"      = "/metrics"
         }
 
         labels = {
-          terrafrom = "true"
+          terraform = "true",
           app       = var.name
         }
       }
@@ -33,58 +34,6 @@ resource "kubernetes_daemonset" "this" {
         automount_service_account_token = true
         restart_policy                  = "Always"
 
-        volume {
-          name = "stats-exporter-mapping-config"
-
-          config_map {
-            name = "${var.name}-config"
-
-            items {
-              key  = "exporterConfiguration"
-              path = "mapping-config.yaml"
-            }
-          }
-        }
-
-        container {
-          name              = "${var.name}-statsd-sink"
-          image             = "${var.exporter_image}:${var.exporter_image_tag}"
-          image_pull_policy = var.image_pull_policy
-
-          args = [
-            "-statsd.listen-address=:8125",
-            "-statsd.mapping-config=/statsd-exporter/mapping-config.yaml",
-          ]
-
-          resources {
-            requests {
-              memory = var.resources_statsd_requests_memory
-              cpu    = var.resources_statsd_requests_cpu
-            }
-
-            limits {
-              memory = var.resources_statsd_limits_memory
-              cpu    = var.resources_statsd_limits_cpu
-            }
-          }
-
-          port {
-            container_port = 9102
-            name           = "metrics"
-            protocol       = "TCP"
-          }
-          port {
-            container_port = 8125
-            name           = "listener"
-            protocol       = "TCP"
-          }
-
-          volume_mount {
-            mount_path = "/statsd-exporter/"
-            name       = "stats-exporter-mapping-config"
-            read_only  = true
-          }
-        }
         container {
           name                     = var.name
           image                    = "${var.ambassador_image}:${var.ambassador_image_tag}"
