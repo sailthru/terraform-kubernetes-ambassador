@@ -22,12 +22,13 @@ resource "kubernetes_deployment" "this" {
       metadata {
         annotations = {
           "sidecar.istio.io/inject" = false
-          "prometheus.io/port"      = "9102"
+          "prometheus.io/port"      = 8877
           "prometheus.io/scrape"    = true
+          "prometheus.io/path"      = "/metrics"
         }
 
         labels = {
-          terrafrom = "true",
+          terraform = "true",
           app       = var.name
         }
       }
