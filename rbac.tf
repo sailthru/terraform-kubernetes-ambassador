@@ -50,6 +50,11 @@ resource "kubernetes_cluster_role" "this" {
     resources  = ["configmaps"]
     verbs      = ["create", "update", "patch", "get", "list", "watch"]
   }
+  rule {
+    api_groups = ["extensions", "networking.k8s.io"]
+    resources  = ["ingressclasses", "ingresses"]
+    verbs      = ["get", "list", "watch"]
+  }
 }
 
 resource "kubernetes_cluster_role_binding" "this" {
