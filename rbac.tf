@@ -36,8 +36,8 @@ resource "kubernetes_cluster_role" "this" {
     verbs      = ["update"]
   }
   rule {
-    api_groups = ["extensions"]
-    resources  = ["ingresses"]
+    api_groups = ["extensions", "networking.k8s.io"]
+    resources  = ["ingressclasses", "ingresses"]
     verbs      = ["get", "list", "watch"]
   }
   rule {
