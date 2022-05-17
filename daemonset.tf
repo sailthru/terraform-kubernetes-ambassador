@@ -41,12 +41,12 @@ resource "kubernetes_daemonset" "this" {
           termination_message_path = "/dev/termination-log"
 
           resources {
-            requests = {
+            requests {
               memory = var.resources_requests_memory
               cpu    = var.resources_requests_cpu
             }
 
-            limits = {
+            limits {
               memory = var.resources_limits_memory
               cpu    = var.resources_limits_cpu
             }
